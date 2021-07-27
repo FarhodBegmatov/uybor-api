@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntrancesTable extends Migration
+class CreateFloorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateEntrancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('entrances', function (Blueprint $table) {
+        Schema::create('floors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('number');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ class CreateEntrancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entrances');
+        Schema::dropIfExists('floors');
     }
 }
