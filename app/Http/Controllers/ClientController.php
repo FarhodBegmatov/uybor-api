@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entrance;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
-class EntranceController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class EntranceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Entrance  $entrance
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function show(Entrance $entrance)
+    public function show(Client $client)
     {
         //
     }
@@ -52,10 +52,10 @@ class EntranceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Entrance  $entrance
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Entrance $entrance)
+    public function edit(Client $client)
     {
         //
     }
@@ -64,10 +64,10 @@ class EntranceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Entrance  $entrance
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Entrance $entrance)
+    public function update(Request $request, Client $client)
     {
         //
     }
@@ -75,10 +75,10 @@ class EntranceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Entrance  $entrance
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Entrance $entrance)
+    public function destroy(Client $client)
     {
         //
     }

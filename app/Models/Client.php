@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Apartment extends Model
+class Client extends Model
 {
-    protected $fillable = ['name', 'number', 'square', 'price', 'status'];
+    protected $fillable = ['name', 'surname', 'phone_number'];
 
     public $timestamps = false;
-
 }
