@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Entrance extends Model
 {
-    protected $fillable = ['name', 'number'];
+    protected $fillable = ['house_id', 'name', 'number'];
 
     public $timestamps = false;
 
@@ -15,8 +15,4 @@ class Entrance extends Model
         return $this->hasMany(Floor::class);
     }
 
-    public function house()
-    {
-        return $this->belongsTo(House::class);
-    }
 }

@@ -10,17 +10,19 @@ class FloorController extends Controller
 {
     public function index()
     {
-        return response()->json(Floor::get(), 200);
+        return response()->json(Floor::with('apartments')->get(), 200);
     }
 
     public function getById($id)
     {
-        return response()->json(Floor::find($id), 200);
+        return response()->json(Floor::with('apartments')->find($id), 200);
     }
 
     public function create(Request $request)
     {
         $data = $request->validate([
+            'house_id' => 'required|integer|exists:houses,id',
+            'entrance_id' => 'required|integer|exists:entrances,id',
             'name' => 'required|string|max:155',
             'number' => 'required|integer',
         ]);

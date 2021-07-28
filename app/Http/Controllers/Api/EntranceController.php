@@ -10,17 +10,18 @@ class EntranceController extends Controller
 {
     public function index()
     {
-        return response()->json(Entrance::get(), 200);
+        return response()->json(Entrance::with('floors')->get(), 200);
     }
 
     public function getById($id)
     {
-        return response()->json(Entrance::find($id), 200);
+        return response()->json(Entrance::with('floors')->find($id), 200);
     }
 
     public function create(Request $request)
     {
         $data = $request->validate([
+            'house_id' => 'required|integer|exists:houses,id',
             'name' => 'required|string|max:155',
             'number' => 'required|integer',
         ]);

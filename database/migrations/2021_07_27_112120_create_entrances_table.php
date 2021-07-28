@@ -15,6 +15,11 @@ class CreateEntrancesTable extends Migration
     {
         Schema::create('entrances', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('house_id');
+            $table->foreign('house_id')
+                ->references('id')
+                ->on('houses')
+                ->onDelete('cascade');
             $table->string('name');
             $table->integer('number');
             $table->timestamps();

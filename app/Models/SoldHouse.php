@@ -9,4 +9,6 @@ class SoldHouse extends Model
     protected $fillable = ['client_id', 'apartment_id', 'summa'];
 
     public $timestamps = false;
+
+
 }

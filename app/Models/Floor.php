@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Floor extends Model
 {
-    protected $fillable = ['name', 'number'];
+    protected $fillable = ['house_id', 'entrance_id', 'name', 'number'];
 
     public $timestamps = false;
 

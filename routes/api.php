@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EntranceController;
 use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\HouseController;
+use App\Http\Controllers\Api\SoldHouseController;
 use Illuminate\Support\Facades\Route;
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -50,5 +51,13 @@ Route::group(['prefix' => 'v1'], function (){
         Route::post('', [ClientController::class, 'create']);
         Route::put('/{client}', [ClientController::class, 'update']);
         Route::delete('/{client}', [ClientController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'soldHouses'], function () {
+        Route::get('', [soldHouseController::class, 'index']);
+        Route::get('/{id}', [soldHouseController::class, 'getById']);
+        Route::post('', [soldHouseController::class, 'create']);
+        Route::put('/{soldHouse}', [soldHouseController::class, 'update']);
+        Route::delete('/{soldHouse}', [soldHouseController::class, 'destroy']);
     });
 });

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Apartment extends Model
 {
-    protected $fillable = ['name', 'number', 'square', 'price', 'status'];
+    protected $fillable = ['house_id', 'entrance_id', 'floor_id', 'name', 'number', 'square', 'price', 'status'];
 
     public $timestamps = false;
 

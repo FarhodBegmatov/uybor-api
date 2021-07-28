@@ -15,6 +15,21 @@ class CreateApartmentsTable extends Migration
     {
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('house_id');
+            $table->foreign('house_id')
+                ->references('id')
+                ->on('houses')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('entrance_id');
+            $table->foreign('entrance_id')
+                ->references('id')
+                ->on('entrances')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('floor_id');
+            $table->foreign('floor_id')
+                ->references('id')
+                ->on('floors')
+                ->onDelete('cascade');
             $table->string('name');
             $table->integer('number');
             $table->double('square');

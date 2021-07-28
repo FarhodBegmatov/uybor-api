@@ -10,12 +10,12 @@ class HouseController extends Controller
 {
     public function index()
     {
-        return response()->json(House::get(), 200);
+        return response()->json(House::with(['entrances'])->get(), 200);
     }
 
     public function getById($id)
     {
-        return response()->json(House::find($id), 200);
+        return response()->json(House::with(['entrances'])->find($id), 200);
     }
 
     public function create(Request $request)
