@@ -10,4 +10,8 @@ class Apartment extends Model
 
     public $timestamps = false;
 
+    public function soldHouse()
+    {
+        return $this->hasOne(SoldHouse::class);
+    }
 }

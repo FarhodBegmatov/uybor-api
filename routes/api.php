@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApartmentController;
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EntranceController;
 use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\HouseController;
@@ -41,5 +42,13 @@ Route::group(['prefix' => 'v1'], function (){
         Route::post('', [ApartmentController::class, 'create']);
         Route::put('/{apartment}', [ApartmentController::class, 'update']);
         Route::delete('/{apartment}', [ApartmentController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'clients'], function () {
+        Route::get('', [ClientController::class, 'index']);
+        Route::get('/{id}', [ClientController::class, 'getById']);
+        Route::post('', [ClientController::class, 'create']);
+        Route::put('/{client}', [ClientController::class, 'update']);
+        Route::delete('/{client}', [ClientController::class, 'destroy']);
     });
 });
