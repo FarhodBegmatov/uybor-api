@@ -60,4 +60,12 @@ Route::group(['prefix' => 'v1'], function (){
         Route::put('/{soldHouse}', [soldHouseController::class, 'update']);
         Route::delete('/{soldHouse}', [soldHouseController::class, 'destroy']);
     });
+
+//    Route::group(['prefix' => 'users'], function () {
+//        Route::get('', [UserController::class, 'index']);
+//        Route::get('/{id}', [UserController::class, 'getById']);
+//        Route::post('', [UserController::class, 'create']);
+//        Route::put('/{user}', [UserController::class, 'update']);
+//        Route::delete('/{user}', [UserController::class, 'destroy']);
+//    });
 });
