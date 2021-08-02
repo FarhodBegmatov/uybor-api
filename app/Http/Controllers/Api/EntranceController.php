@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Entrance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EntranceController extends Controller
 {
@@ -20,6 +21,11 @@ class EntranceController extends Controller
 
     public function create(Request $request)
     {
+        if (Gate::denies('createData')){
+            return response([
+                'message' => 'You are not allowed to do this!'
+            ]);
+        }
         $data = $request->validate([
             'house_id' => 'required|integer|exists:houses,id',
             'name' => 'required|string|max:155',
@@ -32,12 +38,22 @@ class EntranceController extends Controller
 
     public function update(Request $request, Entrance $entrance)
     {
+        if (Gate::denies('updateData')){
+            return response([
+                'message' => 'You are not allowed to do this!'
+            ]);
+        }
         $entrance->update($request->all());
         return response()->json($entrance, 200);
     }
 
     public function destroy(Entrance $entrance)
     {
+        if (Gate::denies('deleteData')){
+            return response([
+                'message' => 'You are not allowed to do this!'
+            ]);
+        }
         $entrance->delete();
         return response()->json(' ', 204);
     }
