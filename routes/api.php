@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EntranceController;
 use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\HouseController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SoldHouseController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,13 @@ Route::group(['middleware' => ['auth:sanctum']], function()  {
     Route::group(['prefix' => 'v1'], function (){
 
         Route::post('logout', [AuthController::class, 'logout']);
+
+        Route::group(['prefix' => 'roles'], function () {
+            Route::get('', [RoleController::class, 'index']);
+            Route::post('', [RoleController::class, 'create']);
+            Route::put('/{role}', [RoleController::class, 'update']);
+            Route::delete('/{role}', [RoleController::class, 'destroy']);
+        });
 
         Route::group(['prefix' => 'houses'], function () {
             Route::get('', [HouseController::class, 'index']);
