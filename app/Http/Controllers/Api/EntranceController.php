@@ -3,58 +3,37 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EntranceRequest;
+use App\Http\Resources\EntranceResource;
 use App\Models\Entrance;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class EntranceController extends Controller
 {
     public function index()
     {
-        return response()->json(Entrance::with('floors')->get(), 200);
+        return EntranceResource::collection(Entrance::with('floors')->get());
     }
 
     public function getById($id)
     {
-        return response()->json(Entrance::with('floors')->find($id), 200);
+        return new EntranceResource(Entrance::with('floors')->find($id));
     }
 
-    public function create(Request $request)
+    public function create(EntranceRequest $request)
     {
-        if (Gate::denies('createData')){
-            return response([
-                'message' => 'You are not allowed to do this!'
-            ]);
-        }
-        $data = $request->validate([
-            'house_id' => 'required|integer|exists:houses,id',
-            'name' => 'required|string|max:155',
-            'number' => 'required|integer',
-        ]);
-
-        $entrance = Entrance::create($data);
-        return response()->json($entrance, 201);
+        Entrance::create($request->validated());
+        return $this->createdData();
     }
 
-    public function update(Request $request, Entrance $entrance)
+    public function update(EntranceRequest $request, Entrance $entrance)
     {
-        if (Gate::denies('updateData')){
-            return response([
-                'message' => 'You are not allowed to do this!'
-            ]);
-        }
         $entrance->update($request->all());
-        return response()->json($entrance, 200);
+        return $this->updatedData();
     }
 
     public function destroy(Entrance $entrance)
     {
-        if (Gate::denies('deleteData')){
-            return response([
-                'message' => 'You are not allowed to do this!'
-            ]);
-        }
         $entrance->delete();
-        return response()->json(' ', 204);
+        return $this->deletedData();
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClientRequest;
+use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Http\Request;
 
@@ -10,35 +12,29 @@ class ClientController extends Controller
 {
     public function index()
     {
-        return response()->json(Client::get(), 200);
+        return ClientResource::collection(Client::get());
     }
 
     public function getById($id)
     {
-        return response()->json(Client::find($id), 200);
+        return ClientResource::collection(Client::findOrFail($id));
     }
 
-    public function create(Request $request)
+    public function create(ClientRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:155',
-            'surname' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:255',
-        ]);
-
-        $client = Client::create($data);
-        return response()->json($client, 201);
+        Client::create($request->validated());
+        return $this->createdData();
     }
 
-    public function update(Request $request, Client $client)
+    public function update(ClientRequest $request, Client $client)
     {
-        $client->update($request->all());
-        return response()->json($client, 200);
+        $client->update($request->validated());
+        return $this->updatedData();
     }
 
     public function destroy(Client $client)
     {
         $client->delete();
-        return response()->json(' ', 204);
+        return $this->deletedData();
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SoldHouseRequest;
+use App\Http\Resources\SoldHouseResource;
 use App\Models\Apartment;
 use App\Models\SoldHouse;
 use Illuminate\Http\Request;
@@ -11,43 +13,39 @@ class SoldHouseController extends Controller
 {
     public function index()
     {
-        return response()->json(SoldHouse ::get(), 200);
+        return SoldHouseResource::collection(SoldHouse::get());
     }
 
     public function getById($id)
     {
-        return response()->json(SoldHouse ::find($id), 200);
+        return new SoldHouseResource(SoldHouse::find($id));
     }
 
-    public function create(Request $request)
+    public function create(SoldHouseRequest $request)
     {
-        $data = $request->validate([
-            'client_id' => 'required|integer',
-            'apartment_id' => 'required|integer',
-        ]);
-
+        $data = $request->validated();
         $square = Apartment::query()
             ->where('id', '=', $data['apartment_id'])
-            ->select('square')->value('square');
+            ->value('square');
         $price = Apartment::query()
             ->where('id', '=', $data['apartment_id'])
-            ->select('price')->value('price');
+            ->value('price');
 
         $data['summa'] = $square * $price;
 
-        $soldHouse = SoldHouse ::create($data);
-        return response()->json($soldHouse, 201);
+        SoldHouse ::create($data);
+        return $this->createdData();
     }
 
-    public function update(Request $request, SoldHouse $soldHouse)
+    public function update(SoldHouseRequest $request, SoldHouse $soldHouse)
     {
         $soldHouse->update($request->all());
-        return response()->json($soldHouse, 200);
+        return $this->updatedData();
     }
 
     public function destroy(SoldHouse $soldHouse)
     {
         $soldHouse->delete();
-        return response()->json(' ', 204);
+        return $this->deletedData();
     }
 }

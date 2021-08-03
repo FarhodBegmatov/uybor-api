@@ -11,5 +11,28 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function createdData()
+    {
+        return[
+            'message' => "Successfully created!",
+            'status_code' => '201'
+        ];
+    }
+
+    public function updatedData()
+    {
+        return[
+            'message' => "Successfully updated!",
+            'status_code' => '200'
+        ];
+    }
+
+    public function deletedData()
+    {
+        return[
+            'message' => "Successfully deleted!",
+            'status_code' => '204'
+        ];
+    }
 
 }
