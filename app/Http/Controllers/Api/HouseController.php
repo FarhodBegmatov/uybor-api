@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\HouseRequest;
 use App\Http\Resources\HouseResource;
 use App\Models\House;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class HouseController extends Controller
 {
