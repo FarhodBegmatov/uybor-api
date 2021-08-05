@@ -11,29 +11,47 @@ class HouseController extends Controller
 {
     public function index()
     {
-        return HouseResource::collection(House::with('entrances')->get());
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return HouseResource::collection(House::with('entrances')->get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function getById($id)
     {
-        return new HouseResource(House::with('entrances')->find($id));
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return new HouseResource(House::with('entrances')->find($id));
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(HouseRequest $request)
     {
-        House::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'house' => House::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(HouseRequest $request, House $house)
     {
-        $house->update($request->validated());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'house' => $house->update($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function destroy(House $house)
     {
-        $house->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $house->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
+
     }
 }

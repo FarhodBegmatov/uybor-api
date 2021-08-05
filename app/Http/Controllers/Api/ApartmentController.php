@@ -6,34 +6,52 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ApartmentRequest;
 use App\Http\Resources\ApartmentResource;
 use App\Models\Apartment;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApartmentController extends Controller
 {
     public function index()
     {
-        return ApartmentResource::collection(Apartment::get());
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return ApartmentResource::collection(Apartment::get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function getById($id)
     {
-        return new ApartmentResource(Apartment::find($id));
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return new ApartmentResource(Apartment::find($id));
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(ApartmentRequest $request)
     {
-        Apartment::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'apartment'=> Apartment::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(ApartmentRequest $request, Apartment $apartment)
     {
-        $apartment->update($request->validated());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'apartment'=> $apartment->update($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function destroy(Apartment $apartment)
     {
-        $apartment->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $apartment->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
     }
 }

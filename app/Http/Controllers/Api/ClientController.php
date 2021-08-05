@@ -12,29 +12,46 @@ class ClientController extends Controller
 {
     public function index()
     {
-        return ClientResource::collection(Client::get());
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return ClientResource::collection(Client::get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function getById($id)
     {
-        return ClientResource::collection(Client::findOrFail($id));
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return ClientResource::collection(Client::findOrFail($id));
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(ClientRequest $request)
     {
-        Client::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'client' => Client::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(ClientRequest $request, Client $client)
     {
-        $client->update($request->validated());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'client' => $client->update($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function destroy(Client $client)
     {
-        $client->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $client->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
     }
 }

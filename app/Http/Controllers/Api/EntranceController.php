@@ -11,29 +11,48 @@ class EntranceController extends Controller
 {
     public function index()
     {
-        return EntranceResource::collection(Entrance::with('floors')->get());
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return EntranceResource::collection(Entrance::with('floors')->get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function getById($id)
     {
-        return new EntranceResource(Entrance::with('floors')->find($id));
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return new EntranceResource(Entrance::with('floors')->find($id));
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(EntranceRequest $request)
     {
-        Entrance::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'entrance' => Entrance::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(EntranceRequest $request, Entrance $entrance)
     {
-        $entrance->update($request->all());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'entrance' => $entrance->update($request->all())
+            ]);
+        }
+        $this->messageNotAllowedTo();
+
     }
 
     public function destroy(Entrance $entrance)
     {
-        $entrance->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $entrance->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
+
     }
 }

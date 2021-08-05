@@ -6,34 +6,53 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FloorRequest;
 use App\Http\Resources\FloorResource;
 use App\Models\Floor;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class FloorController extends Controller
 {
     public function index()
     {
-        return FloorResource::collection(Floor::with('apartments')->get());
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return FloorResource::collection(Floor::with('apartments')->get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function getById($id)
     {
-        return new FloorResource(Floor::with('apartments')->find($id));
+        if (auth()->user()->hasAnyRoles(['super-admin', 'manager'])) {
+            return new FloorResource(Floor::with('apartments')->find($id));
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(FloorRequest $request)
     {
-        Floor::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'floor' => Floor::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(FloorRequest $request, Floor $floor)
     {
-        $floor->update($request->validated());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'floor' => $floor->update($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function destroy(Floor $floor)
     {
-        $floor->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $floor->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
+
     }
 }

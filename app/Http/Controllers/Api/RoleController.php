@@ -11,24 +11,38 @@ class RoleController extends Controller
 {
     public function index()
     {
-        return RoleResource::collection(Role::get());
+        if (auth()->user()->hasRole('super-admin')){
+            return RoleResource::collection(Role::get());
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function create(RoleRequest $request)
     {
-        Role ::create($request->validated());
-        return $this->createdData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->createdData([
+                'role' => Role ::create($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function update(RoleRequest $request, Role $role)
     {
-        $role->update($request->validated());
-        return $this->updatedData();
+        if (auth()->user()->hasRole('super-admin')){
+            return $this->updatedData([
+                'role' => $role->update($request->validated())
+            ]);
+        }
+        $this->messageNotAllowedTo();
     }
 
     public function destroy(Role $role)
     {
-        $role->delete();
-        return $this->deletedData();
+        if (auth()->user()->hasRole('super-admin')){
+            $role->delete();
+            return $this->deletedData();
+        }
+        $this->messageNotAllowedTo();
     }
 }

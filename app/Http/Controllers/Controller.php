@@ -11,19 +11,21 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function createdData()
+    public function createdData(array $data)
     {
-        return[
+        return [
             'message' => "Successfully created!",
-            'status_code' => '201'
+            'status_code' => '201',
+            'data'=>$data
         ];
     }
 
-    public function updatedData()
+    public function updatedData(array $data)
     {
         return[
             'message' => "Successfully updated!",
-            'status_code' => '200'
+            'status_code' => '200',
+            'data'=>$data
         ];
     }
 
@@ -32,6 +34,13 @@ class Controller extends BaseController
         return[
             'message' => "Successfully deleted!",
             'status_code' => '204'
+        ];
+    }
+
+    public function messageNotAllowedTo()
+    {
+        return [
+            'message' => 'You don`t have a permission!'
         ];
     }
 
